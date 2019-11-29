@@ -42,7 +42,7 @@ class SchedulesScreen extends Component<
   async selectOneFile() {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.pdf],
       });
       //Printing the log realted to the file
       console.log('res : ' + JSON.stringify(res));
@@ -51,7 +51,6 @@ class SchedulesScreen extends Component<
       console.log('File Name : ' + res.name);
       console.log('File Size : ' + res.size);
       RNFS.readFile(res.uri, 'base64').then(res => {
-        console.log(res);
         this.setState({
           file: res,
         });

@@ -4,7 +4,7 @@ import Config from 'react-native-config';
 import AsyncStorage from '@react-native-community/async-storage';
 const HORARIO = 'HORARIO';
 const USER_PROFILE = 'USER_PROFILE';
-const REFRESHTOKEN = 'REFRESHTOKEN';
+const LISTDATE = 'LISTDATE';
 
 type CacheType = {
   getApiUrl: () => string,
@@ -14,17 +14,22 @@ type CacheType = {
   getUserProfile: () => Promise<string>,
   delUser: () => void,
   removeAll: any => void,
-  setRToken: any => void,
-  getRToken: () => Promise<string>,
+  setList: any => void,
+  getList: () => Promise<string>,
 };
 
 const CacheUtil: CacheType = {
   getApiUrl: (): string => Config.API_URL,
 
-  setRToken: (RToken: string) => {
-    console.log('REFRESHTOKEN CACHE SETED', RToken);
-    return AsyncStorage.setItem(REFRESHTOKEN, RToken);
+  setList: (NewItemList: string) => {
+    //console.log('SetList', NewItemList);
+    return AsyncStorage.setItem(LISTDATE, NewItemList.toString());
   },
+
+  getList: async (): Promise<string> => {
+    return await AsyncStorage.getItem(LISTDATE);
+  },
+
   setHorario: (H: string) => {
     console.log('Horario Seted', H);
     return AsyncStorage.setItem(HORARIO, H.toString());
@@ -32,10 +37,6 @@ const CacheUtil: CacheType = {
 
   getHORARIO: async (): Promise<string> => {
     return await AsyncStorage.getItem(HORARIO);
-  },
-
-  getRToken: async (): Promise<string> => {
-    return await AsyncStorage.getItem(REFRESHTOKEN);
   },
 
   setUserProfile: (userProfile: string) => {

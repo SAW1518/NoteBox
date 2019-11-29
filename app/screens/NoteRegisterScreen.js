@@ -22,6 +22,10 @@ import {SegmentedControls} from 'react-native-radio-buttons';
 import {Textarea, DatePicker} from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import CacheUtil from '../utils/cache/CacheUtil';
+import {resetAndNavigateTo} from '../NavigationUtil';
+import DocumentPicker from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
 
 type NoteRegisterScreenProps = {
   navigation: any,
@@ -50,17 +54,18 @@ class NoteRegisterScreen extends Component<
       ),
     };
   };
-  items = [{name: 'DOC1', ext: '.txt'}, {name: 'DOC2', ext: '.pdf'}];
+  items = [];
 
   state = {
     selectedSegment: 'Tipo',
+    prebusList: [],
     titulo: '',
     materia: '',
     descripcion: '',
     date: new Date(),
     mode: 'date',
     show: false,
-    docs:[],
+    docs: [],
   };
 
   setDate = (event, date) => {
@@ -78,6 +83,17 @@ class NoteRegisterScreen extends Component<
       mode,
     });
   };
+  UNSAFE_componentWillMount(): void {
+    CacheUtil.getList().then(List => {
+      if (List !== null) {
+        this.setState({
+          prebusList: JSON.parse(List),
+        });
+      } else {
+        console.log('NO List Cahe');
+      }
+    });
+  }
 
   datepicker = () => {
     this.show('date');
@@ -86,7 +102,64 @@ class NoteRegisterScreen extends Component<
   timepicker = () => {
     this.show('time');
   };
+  listNewDocs = [];
+  async selectOneFile() {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      //Printing the log realted to the file
+      console.log('res : ' + JSON.stringify(res));
+      console.log('URI : ' + res.uri);
+      console.log('Type : ' + res.type);
+      console.log('File Name : ' + res.name);
+      console.log('File Size : ' + res.size);
+      RNFS.readFile(res.uri, 'base64').then(res64 => {
+        let item = {
+          base64: res64,
+          extencin: res.type,
+          name: res.name,
+        };
+        this.listNewDocs = this.state.docs;
+        this.listNewDocs.push(item);
+        this.setState({
+          docs: this.listNewDocs,
+        });
+      });
 
+      this.setState({singleFile: res});
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        alert('Canceled from single doc picker');
+      } else {
+        alert('Unknown Error: ' + JSON.stringify(err));
+        throw err;
+      }
+    }
+  }
+
+  listExit = [];
+  setList = () => {
+    this.listExit = this.state.prebusList;
+   // console.log(this.state);
+    let newItem = {
+      id: 2,
+      Titulo: 'none',
+      Materia: 'none',
+      Fecha: 'none',
+      Descripcion: 'none',
+      docs: [],
+    };
+    newItem.Titulo = this.state.titulo;
+    newItem.Materia = this.state.materia;
+    newItem.Fecha = this.state.date.toISOString();
+    newItem.Descripcion = this.state.descripcion;
+    newItem.docs = this.state.docs
+    this.listExit.push(newItem);
+    console.log('listExit', this.listExit);
+    CacheUtil.setList(JSON.stringify(this.listExit));
+    resetAndNavigateTo(this.props.navigation, 'Mine');
+  };
   render() {
     const {mainView} = styles;
     const {show, date, mode} = this.state;
@@ -109,7 +182,7 @@ class NoteRegisterScreen extends Component<
           <ButtonComponent
             backgroundColor={color.greenLight}
             title={'Crear'}
-            onPress={() => console.log(this.state)}
+            onPress={() => this.setList()}
             width={width(40)}
           />
         </View>
@@ -253,9 +326,9 @@ class NoteRegisterScreen extends Component<
             style={{
               width: width(60),
             }}>
-            {this.items.map((item, key) => {
+            {this.state.docs.map((item, key) => {
               return (
-                <View key={key}>{this._renderList(item.ext, item.name)}</View>
+                <View key={key}>{this._renderList(item.extencin, item.name)}</View>
               );
             })}
           </View>
@@ -271,7 +344,8 @@ class NoteRegisterScreen extends Component<
               style={{
                 backgroundColor: color.greenLight,
                 borderRadius: width(5),
-              }}>
+              }}
+              onPress={() => this.selectOneFile()}>
               <Image
                 style={{
                   height: width(10),
@@ -293,12 +367,20 @@ class NoteRegisterScreen extends Component<
     let uriImg;
     if (type == '.txt') {
       uriImg = require('../utils/icons/txt.png');
-    } else if (type == '.pdf') {
+    } else if (type == 'application/pdf') {
       uriImg = require('../utils/icons/pdf.png');
-    } else if (type == '.pptx') {
+    } else if (
+      type ==
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ) {
       uriImg = require('../utils/icons/pptx.png');
-    } else if (type == '.xlsx') {
+    } else if (
+      type ==
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
       uriImg = require('../utils/icons/xlsx.png');
+    } else if (type == 'application/msword') {
+      uriImg = require('../utils/icons/doc-icon.png');
     }
     return (
       <View

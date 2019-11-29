@@ -16,6 +16,7 @@ import {
   goBack,
   goAndNavigateTo,
 } from '../NavigationUtil';
+import CacheUtil from '../utils/cache/CacheUtil';
 
 type NoteScreenProps = {
   navigation: any,
@@ -27,20 +28,29 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
     header: null,
   };
 
-  state = {};
+  state = {
+    ListNote: [],
+  };
+
+  UNSAFE_componentWillMount(): void {
+    CacheUtil.getList().then(list => {
+      if (list !== null) {
+        this.setState({
+          ListNote: JSON.parse(list),
+        });
+      }
+    });
+  }
 
   componentDidMount() {}
 
   render() {
     const {mainView} = styles;
     return (
-        <View style={mainView}>
-          {this._renderHeader()}
-
-          {this._renderContent()}
-
-        </View>
-
+      <View style={mainView}>
+        {this._renderHeader()}
+        {this._renderContent()}
+      </View>
     );
   }
 
@@ -67,7 +77,6 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
 
   _renderContent = () => {
     return (
-
       <View
         style={{
           width: '100%',
@@ -75,23 +84,29 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
           alignItems: 'center',
           flexDirection: 'column',
         }}>
-        <ScrollView style={{width: '90%'}}>{this._renderNote()}</ScrollView>
+        <ScrollView style={{width: '90%', height: '89%'}}>
+          {this.state.ListNote.map((item, key) => {
+            return <View key={key}>{this._renderNote(item)}</View>;
+          })}
+        </ScrollView>
       </View>
     );
   };
-  _renderNote = () => {
+  _renderNote = item => {
     return (
       <View
         style={{
           width: '100%',
           height: height(15),
+          marginTop: width(5),
           borderRadius: width(3),
           flexDirection: 'column',
           backgroundColor: color.white,
           padding: width(2),
         }}>
-        <Text >{'Titulo: '}</Text>
-        <Text>{'nota nueva'}</Text>
+        <Text>{'Titulo :' + item.Titulo}</Text>
+        <Text>{'Materia :' + item.Materia}</Text>
+        <Text>{'Descripcion :' + item.Descripcion}</Text>
       </View>
     );
   };
