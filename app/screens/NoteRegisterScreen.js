@@ -6,8 +6,9 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  FlatList,
   TouchableOpacity,
+  Button,
+  Platform,
 } from 'react-native';
 import {
   StyleBarTransparent,
@@ -19,6 +20,8 @@ import {height, width} from 'react-native-dimension';
 import ButtonComponent from '../components/ButtonComponent';
 import {SegmentedControls} from 'react-native-radio-buttons';
 import {Textarea, DatePicker} from 'native-base';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 type NoteRegisterScreenProps = {
   navigation: any,
@@ -51,14 +54,42 @@ class NoteRegisterScreen extends Component<
 
   state = {
     selectedSegment: 'Tipo',
-    chosenDate: new Date(),
     titulo: '',
     materia: '',
     descripcion: '',
+    date: new Date(),
+    mode: 'date',
+    show: false,
+    docs:[],
+  };
+
+  setDate = (event, date) => {
+    date = date || this.state.date;
+
+    this.setState({
+      show: Platform.OS === 'ios' ? true : false,
+      date,
+    });
+  };
+
+  show = mode => {
+    this.setState({
+      show: true,
+      mode,
+    });
+  };
+
+  datepicker = () => {
+    this.show('date');
+  };
+
+  timepicker = () => {
+    this.show('time');
   };
 
   render() {
     const {mainView} = styles;
+    const {show, date, mode} = this.state;
     return (
       <View style={mainView}>
         {this._renderButtons()}
@@ -82,6 +113,17 @@ class NoteRegisterScreen extends Component<
             width={width(40)}
           />
         </View>
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            timeZoneOffsetInMinutes={0}
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={this.setDate}
+          />
+        )}
       </View>
     );
   }
@@ -124,6 +166,7 @@ class NoteRegisterScreen extends Component<
   };
 
   _renderForm = () => {
+    const {show, date, mode} = this.state;
     return (
       <View>
         <Text
@@ -162,21 +205,24 @@ class NoteRegisterScreen extends Component<
           }}>
           {'Fecha de Entrega:'}
         </Text>
-        <DatePicker
-          defaultDate={new Date(2019, 4, 4)}
-          minimumDate={new Date(2019, 1, 1)}
-          maximumDate={new Date(2019, 12, 31)}
-          locale={'es'}
-          timeZoneOffsetInMinutes={undefined}
-          modalTransparent={false}
-          animationType={'fade'}
-          androidMode={'default'}
-          placeHolderText="Select date"
-          textStyle={{color: 'green'}}
-          placeHolderTextStyle={{color: '#d3d3d3'}}
-          onDateChange={this.setDate}
-          disabled={false}
-        />
+        <TouchableOpacity
+          style={{
+            height: width(10),
+            flexDirection: 'row',
+          }}
+          onPress={this.datepicker}>
+          <Image
+            style={{height: width(5), width: width(5), tintColor: color.blue}}
+            source={{
+              uri:
+                'https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/calendar-512.png',
+            }}
+          />
+          <Text testID="dateTimeText">
+            {mode === 'date' && moment.utc(date).format('MM/DD/YYYY')}
+          </Text>
+        </TouchableOpacity>
+
         <Text
           style={{
             fontWeight: 'bold',
@@ -187,7 +233,10 @@ class NoteRegisterScreen extends Component<
         <Textarea
           onChangeText={descripcion => this.setState({descripcion})}
           value={this.state.descripcion}
-          style={{width: width(80)}} rowSpan={5} bordered />
+          style={{width: width(80)}}
+          rowSpan={5}
+          bordered
+        />
         <Text
           style={{
             fontWeight: 'bold',

@@ -75,18 +75,7 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
           alignItems: 'center',
           flexDirection: 'column',
         }}>
-        <ScrollView
-          style={{width:'90%' }}
-        >
-        {this._renderNote()}
-        {this._renderNote()}
-        {this._renderNote()}
-        {this._renderNote()}
-        {this._renderNote()}
-        {this._renderNote()}
-        {this._renderNote()}
-        </ScrollView>
-
+        <ScrollView style={{width: '90%'}}>{this._renderNote()}</ScrollView>
       </View>
     );
   };
