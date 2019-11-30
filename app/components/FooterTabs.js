@@ -31,7 +31,11 @@ class FooterTabs extends Component<FooterTabsProps, FooterTabsState> {
     const {selectedIndex, containerStyle} = this.props;
     return (
       <Container>
-        <Footer>
+        <Footer
+          style={{
+            backgroundColor: color.dark,
+        }}
+        >
           <FooterTab
             activeBgColor={'white'}
             style={[

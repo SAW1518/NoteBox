@@ -10,13 +10,9 @@ import {
 } from 'react-native';
 import color from '../utils/common/ColorsCommon';
 import {width, height} from 'react-native-dimension';
-import {
-  resetAndNavigateTo,
-  goAndNavigateTowParams,
-  goBack,
-  goAndNavigateTo,
-} from '../NavigationUtil';
 import CacheUtil from '../utils/cache/CacheUtil';
+import { Container, Header, Left, Body, Right, Button, Icon, Title } from 'native-base'
+import {goAndNavigateTo} from '../NavigationUtil';
 
 type NoteScreenProps = {
   navigation: any,
@@ -56,22 +52,22 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
 
   _renderHeader = () => {
     return (
-      <View
-        style={{
-          height: height(8),
-          width: width(100),
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-        }}>
-        <View style={{width: '90%', height: '100%'}} />
-        <TouchableOpacity
-          onPress={() =>
-            goAndNavigateTo(this.props.navigation, 'NoteRegister')
-          }>
-          <Text style={{color: color.greenLight}}>{'ADD'}</Text>
-        </TouchableOpacity>
-      </View>
+      <Header
+        androidStatusBarColor={color.dark}
+        style={{backgroundColor: color.dark}}>
+        <Body>
+          <Title style={{marginVertical: height(3)}}>   Notas</Title>
+        </Body>
+        <Right>
+          <Button
+            onPress={() =>
+              goAndNavigateTo(this.props.navigation, 'NoteRegister')
+            }
+            transparent>
+            <Icon name="add" />
+          </Button>
+        </Right>
+      </Header>
     );
   };
 
@@ -86,7 +82,9 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
         }}>
         <ScrollView style={{width: '90%', height: '89%'}}>
           {this.state.ListNote.map((item, key) => {
-            return <View key={key}>{this._renderNote(item)}</View>;
+            return (
+              <View key={key}>{this._renderNote(item)}</View>
+            );
           })}
         </ScrollView>
       </View>
@@ -115,7 +113,6 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
 const styles = StyleSheet.create({
   mainView: {
     flexDirection: 'column',
-    alignItems: 'center',
     marginTop: height(3),
     height: height(88),
     backgroundColor: color.dark,

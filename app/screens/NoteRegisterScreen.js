@@ -43,11 +43,12 @@ class NoteRegisterScreen extends Component<
       headerTitle: (
         <View
           style={{
-            backgroundColor: color.greenLight,
+            backgroundColor: color.gray_ph,
             width: '90%',
             alignItems: 'center',
           }}>
-          <Text style={{color: 'white', fontSize: 21, paddingHorizontal: 16}}>
+          <Text
+            style={{color: color.gray, fontSize: 21, paddingHorizontal: 16}}>
             {'Registro de Nota'}
           </Text>
         </View>
@@ -141,7 +142,7 @@ class NoteRegisterScreen extends Component<
   listExit = [];
   setList = () => {
     this.listExit = this.state.prebusList;
-   // console.log(this.state);
+    //console.log(this.state);
     let newItem = {
       id: 2,
       Titulo: 'none',
@@ -154,7 +155,7 @@ class NoteRegisterScreen extends Component<
     newItem.Materia = this.state.materia;
     newItem.Fecha = this.state.date.toISOString();
     newItem.Descripcion = this.state.descripcion;
-    newItem.docs = this.state.docs
+    newItem.docs = this.state.docs;
     this.listExit.push(newItem);
     console.log('listExit', this.listExit);
     CacheUtil.setList(JSON.stringify(this.listExit));

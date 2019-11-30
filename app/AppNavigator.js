@@ -15,10 +15,10 @@ export const Navigator = createStackNavigator({
 const App = createAppContainer(Navigator);
 
 const AppNavigator = () => (
-  <View style={{flex: 1, backgroundColor: color.white}}>
+  <View style={{flex: 1, backgroundColor: color.dark}}>
     <StatusBar
-      backgroundColor={color.pastDueBalance}
-      barStyle="dark-content"
+      tintColor="#ef5350"
+      backgroundColor={'transparent'}
       translucent
     />
     <App />

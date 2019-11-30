@@ -1,12 +1,8 @@
 //@flow
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, NativeModules} from 'react-native';
-import {SharePdf64} from '../utils/common/StringsValidator';
-import PDFView from 'react-native-view-pdf';
-import CacheUtil from '../utils/cache/CacheUtil';
 import FooterTabs from '../components/FooterTabs';
 import {height, width} from 'react-native-dimension';
-
 import NoteScreen from '../screens/NoteScreen';
 import SchedulesScreen from '../screens/SchedulesScreen';
 
@@ -29,15 +25,24 @@ class MineScreen extends Component<MineScreenProps, MineScreenState> {
 
   render() {
     return (
-      <View style={{flex: 1, height: height(10), width: width(100)}}>
+      <View
+        style={{
+          flex: 1,
+          height: height(10),
+          width: width(100),
+        }}>
         <View
           style={{
             height: height(90),
           }}>
           {this._renderContent()}
         </View>
+
         <FooterTabs
-          containerStyle={{height: height(10)}}
+          containerStyle={{
+            borderTopLeftRadius: width(10),
+            borderTopRightRadius: width(10),
+            height: height(10)}}
           selectionHandler={selectedFooterIndex => {
             const selectionIndex = selectedFooterIndex;
             this.setState({selectedFooterIndex: selectionIndex});
@@ -69,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+
   },
 });
 
