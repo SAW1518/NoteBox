@@ -1,5 +1,5 @@
 import Share from 'react-native-share';
-
+import RNFetchBlob from 'rn-fetch-blob';
 export const validateEmail = (email): boolean => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
@@ -47,13 +47,31 @@ const getMonth = Data => {
   return month < 10 ? '0' + month : '' + month; // ('' + month) for string result
 };
 
-export const SharePdf64 = Pdf64 => {
+export const SharePdf64 = (Pdf64, type) => {
   const shareOptions = {
     title: 'Share file',
-    url: 'data:application/pdf;base64,' + Pdf64,
+    url: 'data:' + type + ';base64,' + Pdf64,
   };
-  return Share.open(shareOptions);
+  Share.open(shareOptions).then(r => console.log('responnse', r));
 };
+export const monthMonthDate = date => {
+  const months = [
+    'ENE',
+    'FEB',
+    'MAR',
+    'ABR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AGO',
+    'SEP',
+    'OCU',
+    'NOV',
+    'DIC',
+  ];
+   const newFormattedDate = months[date.getMonth() + 1];
+   return newFormattedDate;
+ }
 
 export const monthDayYearHoraDateSlideFormat = date => {
   let dateH = date.getHours();

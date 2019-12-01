@@ -10,12 +10,13 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
+import {SharePdf64} from '../utils/common/StringsValidator';
 import {StyleBar} from '../utils/common/StylesBarCommon';
 import color from '../utils/common/ColorsCommon';
 import {height, width} from 'react-native-dimension';
 import ButtonComponent from '../components/ButtonComponent';
 import {SegmentedControls} from 'react-native-radio-buttons';
-import {Textarea, Item, Input, Container} from 'native-base';
+import {Textarea, Item, Input, Container, Icon} from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import CacheUtil from '../utils/cache/CacheUtil';
@@ -162,6 +163,7 @@ class NoteRegisterScreen extends Component<
     //console.log(this.state);
     let newItem = {
       id: this.getLastId(this.listExit) + 1,
+      Tipo: '',
       Titulo: 'none',
       Materia: 'none',
       Fecha: 'none',
@@ -169,6 +171,7 @@ class NoteRegisterScreen extends Component<
       docs: this.state.docs,
     };
     newItem.Titulo = this.state.titulo;
+    newItem.Tipo = this.state.selectedSegment;
     newItem.Materia = this.state.materia;
     newItem.Fecha = this.state.date.toISOString();
     newItem.Descripcion = this.state.descripcion;
@@ -285,19 +288,6 @@ class NoteRegisterScreen extends Component<
               onChangeText={titulo => this.setState({titulo})}
               value={this.state.titulo}
             />
-            <Image
-              resizeMode="contain"
-              style={{
-                height: height(4),
-                width: height(4),
-                tintColor: color.gray_ph,
-                margin: height(1),
-              }}
-              source={{
-                uri:
-                  'https://cdn2.iconfinder.com/data/icons/files-folders-line/100/rename-512.png',
-              }}
-            />
           </Item>
           <Text
             style={{
@@ -310,16 +300,6 @@ class NoteRegisterScreen extends Component<
             <Input
               onChangeText={materia => this.setState({materia})}
               value={this.state.materia}
-            />
-            <Image
-              resizeMode="contain"
-              style={{
-                height: height(4),
-                width: height(4),
-                tintColor: color.gray_ph,
-                margin: height(1),
-              }}
-              source={require('../utils/icons/agenda.png')}
             />
           </Item>
           <Text
@@ -336,11 +316,8 @@ class NoteRegisterScreen extends Component<
             }}
             onPress={this.datepicker}>
             <Image
-              style={{height: width(5), width: width(5), tintColor: color.blue}}
-              source={{
-                uri:
-                  'https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/calendar-512.png',
-              }}
+              style={{height: width(5), width: width(5), tintColor: color.gray}}
+              source={require('../utils/icons/calendar.png')}
             />
             <Text testID="dateTimeText">
               {mode === 'date' && moment.utc(date).format('MM/DD/YYYY')}
@@ -370,59 +347,57 @@ class NoteRegisterScreen extends Component<
           </Text>
           <View
             style={{
-              width: width(80),
+              width: width(90),
               flexDirection: 'row',
             }}>
             <View
               style={{
-                width: width(60),
-              }}>
-              {this.state.docs.map((item, key) => {
-                return (
-                  <View key={key}>
-                    {this._renderList(item.extencin, item.name)}
-                  </View>
-                );
-              })}
-            </View>
-            <View
-              style={{
-                height: '100%',
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                alignItems: 'flex-start',
+                width: width(90),
               }}>
               <TouchableOpacity
                 style={{
-                  backgroundColor: color.greenLight,
-                  borderRadius: width(5),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
-                onPress={() => this.selectOneFile()}>
+              onPress={()=>this.selectOneFile()}
+              >
                 <Image
                   style={{
-                    height: width(10),
-                    width: width(10),
+                    height: height(3),
+                    width: height(3),
+                    tintColor: color.gray_ph,
                   }}
-                  source={{
-                    uri:
-                      'https://cdn3.iconfinder.com/data/icons/rest/30/add_order-512.png',
-                  }}
+                  source={require('../utils/icons/add-file.png')}
                   resizeMode={'cover'}
                 />
+                <Text
+                  style={{
+                    color: color.gray_ph,
+                    fontSize: 16,
+                  }}>
+                  {'Toca para agragar archivo'}
+                </Text>
               </TouchableOpacity>
+              {this.state.docs.map((item, key) => {
+                return (
+                  <View key={key}>
+                    {this._renderList(item.extencin, item.name,item)}
+                  </View>
+                );
+              })}
             </View>
           </View>
         </Container>
       </KeyboardAvoidingView>
     );
   };
-  _renderList = (type, txt, key) => {
+  _renderList = (type, txt, item) => {
     let uriImg;
     if (type == 'text/plain') {
       uriImg = require('../utils/icons/icons8-txt-50.png');
     } else if (type == 'application/pdf') {
-      uriImg = require('../utils/icons/icons8-pdf-16.png');
+      uriImg = require('../utils/icons/adobe-acrobat-pdf-file-document-512.png');
     } else if (
       type ==
       'application/vnd.openxmlformats-officedocument.presentationml.presentation'
@@ -437,7 +412,8 @@ class NoteRegisterScreen extends Component<
       uriImg = require('../utils/icons/icons8-word-48.png');
     }
     return (
-      <View
+      <TouchableOpacity
+        onPress={() => SharePdf64(item.base64, item.extencin)}
         style={{
           flexDirection: 'row',
         }}>
@@ -451,12 +427,12 @@ class NoteRegisterScreen extends Component<
         />
         <Text
           style={{
-            color: color.green,
+            color: color.dark,
             fontSize: 16,
           }}>
           {txt}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 }
