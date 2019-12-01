@@ -58,7 +58,6 @@ export default class App extends Component<void> {
   UNSAFE_componentWillMount(): void {
     this.PermissionsCam();
     this.PermissionsStoWRITE();
-
   }
 
   render() {

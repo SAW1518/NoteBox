@@ -10,13 +10,13 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import {SharePdf64} from '../utils/common/StringsValidator';
 import {StyleBar} from '../utils/common/StylesBarCommon';
 import color from '../utils/common/ColorsCommon';
 import {height, width} from 'react-native-dimension';
 import ButtonComponent from '../components/ButtonComponent';
 import {SegmentedControls} from 'react-native-radio-buttons';
-import {Textarea, Item, Input, Container, Icon} from 'native-base';
+import ListComponent from '../components/ListComponent';
+import {Textarea, Item, Input} from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import CacheUtil from '../utils/cache/CacheUtil';
@@ -274,165 +274,121 @@ class NoteRegisterScreen extends Component<
     const {show, date, mode} = this.state;
     return (
       <KeyboardAvoidingView behavior="padding" enabled>
-        <Container>
-          <Text
-            style={{
-              marginTop: height(2),
-              fontWeight: 'bold',
-              textAlign: 'left',
-            }}>
-            {'Titulo:'}
-          </Text>
-          <Item regular>
-            <Input
-              onChangeText={titulo => this.setState({titulo})}
-              value={this.state.titulo}
-            />
-          </Item>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              textAlign: 'left',
-            }}>
-            {'Materia:'}
-          </Text>
-          <Item regular>
-            <Input
-              onChangeText={materia => this.setState({materia})}
-              value={this.state.materia}
-            />
-          </Item>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              textAlign: 'left',
-            }}>
-            {'Fecha de Entrega:'}
-          </Text>
-          <TouchableOpacity
-            style={{
-              height: width(10),
-              flexDirection: 'row',
-            }}
-            onPress={this.datepicker}>
-            <Image
-              style={{height: width(5), width: width(5), tintColor: color.gray}}
-              source={require('../utils/icons/calendar.png')}
-            />
-            <Text testID="dateTimeText">
-              {mode === 'date' && moment.utc(date).format('MM/DD/YYYY')}
-            </Text>
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              fontWeight: 'bold',
-              textAlign: 'left',
-            }}>
-            {'Descripcion:'}
-          </Text>
-          <Textarea
-            onChangeText={descripcion => this.setState({descripcion})}
-            value={this.state.descripcion}
-            style={{width: width(80)}}
-            rowSpan={3}
-            bordered
-          />
-          <Text
-            style={{
-              fontWeight: 'bold',
-              textAlign: 'left',
-            }}>
-            {'Archivos:'}
-          </Text>
-          <View
-            style={{
-              width: width(90),
-              flexDirection: 'row',
-            }}>
-            <View
-              style={{
-                width: width(90),
-              }}>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              onPress={()=>this.selectOneFile()}
-              >
-                <Image
-                  style={{
-                    height: height(3),
-                    width: height(3),
-                    tintColor: color.gray_ph,
-                  }}
-                  source={require('../utils/icons/add-file.png')}
-                  resizeMode={'cover'}
-                />
-                <Text
-                  style={{
-                    color: color.gray_ph,
-                    fontSize: 16,
-                  }}>
-                  {'Toca para agragar archivo'}
-                </Text>
-              </TouchableOpacity>
-              {this.state.docs.map((item, key) => {
-                return (
-                  <View key={key}>
-                    {this._renderList(item.extencin, item.name,item)}
-                  </View>
-                );
-              })}
-            </View>
-          </View>
-        </Container>
-      </KeyboardAvoidingView>
-    );
-  };
-  _renderList = (type, txt, item) => {
-    let uriImg;
-    if (type == 'text/plain') {
-      uriImg = require('../utils/icons/icons8-txt-50.png');
-    } else if (type == 'application/pdf') {
-      uriImg = require('../utils/icons/adobe-acrobat-pdf-file-document-512.png');
-    } else if (
-      type ==
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-    ) {
-      uriImg = require('../utils/icons/icons8-powerpoint-48.png');
-    } else if (
-      type ==
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
-      uriImg = require('../utils/icons/icons8-xls-48.png');
-    } else if (type == 'application/msword') {
-      uriImg = require('../utils/icons/icons8-word-48.png');
-    }
-    return (
-      <TouchableOpacity
-        onPress={() => SharePdf64(item.base64, item.extencin)}
-        style={{
-          flexDirection: 'row',
-        }}>
-        <Image
+        <Text
           style={{
-            height: height(4),
-            width: height(4),
+            marginTop: height(2),
+            fontWeight: 'bold',
+            textAlign: 'left',
+          }}>
+          {'Titulo:'}
+        </Text>
+        <Item style={{width: '95%'}} regular>
+          <Input
+            onChangeText={titulo => this.setState({titulo})}
+            value={this.state.titulo}
+          />
+        </Item>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            textAlign: 'left',
+          }}>
+          {'Materia:'}
+        </Text>
+        <Item regular style={{width: '95%'}}>
+          <Input
+            onChangeText={materia => this.setState({materia})}
+            value={this.state.materia}
+          />
+        </Item>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            textAlign: 'left',
+          }}>
+          {'Fecha de Entrega:'}
+        </Text>
+        <TouchableOpacity
+          style={{
+            height: width(10),
+            flexDirection: 'row',
           }}
-          source={uriImg}
-          resizeMode={'cover'}
+          onPress={this.datepicker}>
+          <Image
+            style={{height: width(5), width: width(5), tintColor: color.gray}}
+            source={require('../utils/icons/calendar.png')}
+          />
+          <Text testID="dateTimeText">
+            {mode === 'date' && moment.utc(date).format('MM/DD/YYYY')}
+          </Text>
+        </TouchableOpacity>
+
+        <Text
+          style={{
+            fontWeight: 'bold',
+            textAlign: 'left',
+          }}>
+          {'Descripcion:'}
+        </Text>
+        <Textarea
+          onChangeText={descripcion => this.setState({descripcion})}
+          value={this.state.descripcion}
+          style={{width: '95%'}}
+          rowSpan={3}
+          bordered
         />
         <Text
           style={{
-            color: color.dark,
-            fontSize: 16,
+            fontWeight: 'bold',
+            textAlign: 'left',
           }}>
-          {txt}
+          {'Archivos:'}
         </Text>
-      </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}>
+          <View
+            style={{
+              width: width(80),
+            }}>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 4,
+                borderWidth: 0.5,
+                borderColor: '#d6d7da',
+              }}
+              onPress={() => this.selectOneFile()}>
+              <Image
+                style={{
+                  height: height(3),
+                  width: height(3),
+                  tintColor: color.gray_ph,
+                }}
+                source={require('../utils/icons/add-file.png')}
+                resizeMode={'cover'}
+              />
+              <Text
+                style={{
+                  color: color.gray_ph,
+                  fontSize: 16,
+                }}>
+                {'Toca para agragar archivo'}
+              </Text>
+            </TouchableOpacity>
+            {this.state.docs.map((item, key) => {
+              return (
+                <View key={key}>
+                  <ListComponent item={item} />
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     );
   };
 }

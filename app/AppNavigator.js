@@ -7,10 +7,12 @@ import color from './utils/common/ColorsCommon';
 //signIn
 import MineScreen from './screens/MineScreen';
 import NoteRegisterScreen from './screens/NoteRegisterScreen';
+import NoteViewScreen from './screens/NoteViewScreen';
 export const Navigator = createStackNavigator({
   //Mine
   Mine: {screen: MineScreen},
   NoteRegister: {screen: NoteRegisterScreen},
+  NoteView: {screen: NoteViewScreen},
 });
 const App = createAppContainer(Navigator);
 

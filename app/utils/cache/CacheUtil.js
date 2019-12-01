@@ -1,6 +1,7 @@
 //@flow
 import Config from 'react-native-config';
-import {AsyncStorage, NetInfo} from 'react-native';
+import { NetInfo} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 const HORARIO = 'HORARIO';
 const USER_PROFILE = 'USER_PROFILE';
 const LISTDATE = 'LISTDATE';

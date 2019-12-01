@@ -5,7 +5,6 @@ import color from '../utils/common/ColorsCommon';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
 import {height, width} from 'react-native-dimension';
-import PdfViewComponent from '../components/PdfViewComponent';
 import PDFView from 'react-native-view-pdf';
 import CacheUtil from '../utils/cache/CacheUtil';
 type SchedulesScreenProps = {

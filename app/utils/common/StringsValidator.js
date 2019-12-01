@@ -69,9 +69,32 @@ export const monthMonthDate = date => {
     'NOV',
     'DIC',
   ];
-   const newFormattedDate = months[date.getMonth() + 1];
-   return newFormattedDate;
- }
+  const newFormattedDate = months[date.getMonth()];
+  return newFormattedDate;
+};
+export const monthDayYearDate = date => {
+  const months = [
+    'ENE',
+    'FEB',
+    'MAR',
+    'ABR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AGO',
+    'SEP',
+    'OCU',
+    'NOV',
+    'DIC',
+  ];
+  const newFormattedDate =
+    date.getUTCDate() +
+    '/' +
+    months[date.getMonth()] +
+    '/' +
+    date.getFullYear();
+  return newFormattedDate;
+};
 
 export const monthDayYearHoraDateSlideFormat = date => {
   let dateH = date.getHours();

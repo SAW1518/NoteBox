@@ -11,8 +11,17 @@ import {
 import color from '../utils/common/ColorsCommon';
 import {width, height} from 'react-native-dimension';
 import CacheUtil from '../utils/cache/CacheUtil';
-import { Container, Header, Left, Body, Right, Button, Icon, Title } from 'native-base'
-import {goAndNavigateTo} from '../NavigationUtil';
+import {
+  Container,
+  Header,
+  Left,
+  Body,
+  Right,
+  Button,
+  Icon,
+  Title,
+} from 'native-base';
+import {goAndNavigateTo, goAndNavigateTowParams} from '../NavigationUtil';
 import {monthMonthDate} from '../utils/common/StringsValidator';
 
 type NoteScreenProps = {
@@ -32,6 +41,7 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
   UNSAFE_componentWillMount(): void {
     CacheUtil.getList().then(list => {
       if (list !== null) {
+        console.log('CacheUtil', JSON.parse(list));
         this.setState({
           ListNote: JSON.parse(list),
         });
@@ -57,7 +67,7 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
         androidStatusBarColor={color.dark}
         style={{backgroundColor: color.dark}}>
         <Body>
-          <Title style={{marginVertical: height(3)}}>   Notas</Title>
+          <Title style={{marginVertical: height(3)}}> Notas</Title>
         </Body>
         <Right>
           <Button
@@ -90,13 +100,16 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
     );
   };
   _renderNote = item => {
-    let date= new Date(item.Fecha)
-    console.log('date', date.getUTCDate());
+    let date = new Date(item.Fecha);
     return (
-      <View
+      <TouchableOpacity
+        onPress={() =>
+          goAndNavigateTowParams(this.props.navigation, 'NoteView', {
+            id: item.id,
+          })
+        }
         style={{
           width: '100%',
-          height: height(15),
           marginTop: width(5),
           borderRadius: width(3),
           flexDirection: 'row',
@@ -119,7 +132,7 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
           <Text
             style={{
               marginTop: -width(1.5),
-              fontSize:15,
+              fontSize: 15,
               color: color.gray,
             }}>
             {monthMonthDate(date)}
@@ -140,7 +153,60 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
           <Text style={{color: color.gray_ph, fontSize: 12}}>
             {'Materia: ' + item.Materia}
           </Text>
+          <View style={{flexDirection: 'row'}}>
+            {item.docs.length !== 0
+              ? item.docs.map((item, index) => {
+
+                  return (
+                    <View key={index}>
+                      {this._renderDod(item)}
+                    </View>
+                  )
+                })
+              : null}
+          </View>
         </View>
+      </TouchableOpacity>
+    );
+  };
+
+  _renderDod = item => {
+    let uriImg;
+    if (item.extencin == 'text/plain') {
+      uriImg = require('../utils/icons/icons8-txt-50.png');
+    } else if (item.extencin == 'application/pdf') {
+      uriImg = require('../utils/icons/adobe-acrobat-pdf-file-document-512.png');
+    } else if (
+      item.extencin ==
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ) {
+      uriImg = require('../utils/icons/icons8-powerpoint-48.png');
+    } else if (
+      item.extencin ==
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      uriImg = require('../utils/icons/icons8-xls-48.png');
+    } else if (item.extencin == 'application/msword') {
+      uriImg = require('../utils/icons/icons8-word-48.png');
+    }
+    return (
+      <View
+        style={{
+          width: width(8),
+          height: width(8),
+          backgroundColor: color.gray_back,
+          borderRadius: width(5),
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Image
+          style={{
+            height: width(5),
+            width: width(5),
+          }}
+          source={uriImg}
+          resizeMode={'cover'}
+        />
       </View>
     );
   };
