@@ -7,7 +7,8 @@ import CacheUtil from '../utils/cache/CacheUtil';
 import {monthDayYearDate} from '../utils/common/StringsValidator';
 import ListComponent from '../components/ListComponent';
 import ButtonComponent from '../components/ButtonComponent';
-import { Container, Header, Button, Icon, Fab } from 'native-base';
+import {resetAndNavigateTo, goTo, goAndNavigateTowParams} from '../NavigationUtil';
+import {Icon, Fab} from 'native-base';
 type NoteViewScreenProps = {
   navigation: any,
 };
@@ -24,12 +25,16 @@ class NoteViewScreen extends Component<
   state = {
     data: {},
     docs: [],
+    alldata: [],
   };
 
   UNSAFE_componentWillMount(): void {
     console.log('id', this.props.navigation.state.params.id);
     CacheUtil.getList().then(list => {
       let Item = JSON.parse(list);
+      this.setState({
+        alldata: Item,
+      });
       Item.map(item => {
         if (item.id === this.props.navigation.state.params.id) {
           this.setState({
@@ -42,20 +47,54 @@ class NoteViewScreen extends Component<
     });
   }
 
+  newlist = [];
+  delete = id => {
+    let list = this.state.alldata;
+    console.log('all', list);
+    list.map(item => {
+      if (item.id !== id) {
+        this.newlist.push(item);
+      }
+    });
+    console.log('newlist', this.newlist);
+    CacheUtil.setList(JSON.stringify(this.newlist));
+  }
+
   componentDidMount() {}
 
   render() {
     const {mainView} = styles;
     return (
       <View style={mainView}>
-      {this._renderContain()}
+        {this._renderContain()}
         <Fab
           active={this.state.active}
           direction="up"
+          onPress={() =>
+            goAndNavigateTowParams(this.props.navigation, 'NoteRegister', {
+              type: {type: 'Edit', item: this.state.data},
+            })
+          }
           // containerStyle={{ }}
-          style={{ backgroundColor: color.green }}
+          style={{backgroundColor: color.orange}}
+          position="bottomLeft">
+          <Icon type="Feather" name="edit" style={{color: color.white}} />
+        </Fab>
+        <Fab
+          active={this.state.active}
+          direction="up"
+          onPress={() => {
+            this.delete(this.props.navigation.state.params.id);
+            resetAndNavigateTo(this.props.navigation, 'Mine');
+          }}
+          // containerStyle={{ }}
+          style={{backgroundColor: color.green}}
           position="bottomRight">
-          <Icon name="share" />
+          <Icon
+            type="FontAwesome5"
+            name="check-circle"
+            style={{color: color.white}}
+          />
         </Fab>
       </View>
     );
@@ -151,7 +190,6 @@ class NoteViewScreen extends Component<
         style={{
           width: '100%',
           flexDirection: 'column',
-          backgroundColor: 'red',
         }}>
         <Text
           style={{
@@ -163,7 +201,7 @@ class NoteViewScreen extends Component<
           {'Archivos: '}
         </Text>
         <View>
-        {this.state.docs.map((item, key) => {
+          {this.state.docs.map((item, key) => {
             return (
               <View key={key}>
                 <ListComponent item={item} />

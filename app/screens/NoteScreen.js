@@ -72,7 +72,9 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
         <Right>
           <Button
             onPress={() =>
-              goAndNavigateTo(this.props.navigation, 'NoteRegister')
+              goAndNavigateTowParams(this.props.navigation, 'NoteRegister', {
+                type: {type: 'new'},
+              })
             }
             transparent>
             <Icon name="add" />
@@ -99,15 +101,18 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
       </View>
     );
   };
+
+  goTo = item => {
+    goAndNavigateTowParams(this.props.navigation, 'NoteView', {
+      id: item.id,
+    });
+    goAndNavigateTo(this.props.navigation, 'NoteView');
+  }
   _renderNote = item => {
     let date = new Date(item.Fecha);
     return (
       <TouchableOpacity
-        onPress={() =>
-          goAndNavigateTowParams(this.props.navigation, 'NoteView', {
-            id: item.id,
-          })
-        }
+        onPress={() => this.goTo(item)}
         style={{
           width: '100%',
           marginTop: width(5),

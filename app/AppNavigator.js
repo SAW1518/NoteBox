@@ -8,8 +8,10 @@ import color from './utils/common/ColorsCommon';
 import MineScreen from './screens/MineScreen';
 import NoteRegisterScreen from './screens/NoteRegisterScreen';
 import NoteViewScreen from './screens/NoteViewScreen';
+import LoginScreen from './screens/LoginScreen';
 export const Navigator = createStackNavigator({
   //Mine
+  Login: {screen: LoginScreen},
   Mine: {screen: MineScreen},
   NoteRegister: {screen: NoteRegisterScreen},
   NoteView: {screen: NoteViewScreen},
@@ -28,3 +30,4 @@ const AppNavigator = () => (
 );
 
 export default AppNavigator;
+

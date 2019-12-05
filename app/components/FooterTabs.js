@@ -49,13 +49,14 @@ class FooterTabs extends Component<FooterTabsProps, FooterTabsState> {
                 style={{
                   color: selectedIndex === 0 ? color.greenLime : color.dark,
                 }}
-                name="apps"
+                name="clipboard-list"
+                type={'FontAwesome5'}
               />
               <Text
                 style={{
                   color: selectedIndex === 0 ? color.greenLime : color.dark,
                 }}>
-                Apps
+                Notas
               </Text>
             </Button>
             <Button vertical onPress={() => this.props.selectionHandler(1)}>
@@ -63,13 +64,14 @@ class FooterTabs extends Component<FooterTabsProps, FooterTabsState> {
                 style={{
                   color: selectedIndex === 1 ? color.greenLime : color.dark,
                 }}
-                name="camera"
+                name="calendar-clock"
+                type={'MaterialCommunityIcons'}
               />
               <Text
                 style={{
                   color: selectedIndex === 1 ? color.greenLime : color.dark,
                 }}>
-                Camera
+                Horario
               </Text>
             </Button>
             <Button vertical onPress={() => this.props.selectionHandler(2)}>
@@ -78,13 +80,14 @@ class FooterTabs extends Component<FooterTabsProps, FooterTabsState> {
                   color: selectedIndex === 2 ? color.greenLime : color.dark,
                 }}
                 active
-                name="navigate"
+                name="gear"
+                type={'FontAwesome'}
               />
               <Text
                 style={{
                   color: selectedIndex === 2 ? color.greenLime : color.dark,
                 }}>
-                Navigate
+                Ajustes
               </Text>
             </Button>
             <Button vertical onPress={() => this.props.selectionHandler(3)}>

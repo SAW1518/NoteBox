@@ -24,6 +24,7 @@ import {resetAndNavigateTo} from '../NavigationUtil';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
 import Toast from 'react-native-simple-toast';
+
 type NoteRegisterScreenProps = {
   navigation: any,
 };
@@ -82,6 +83,27 @@ class NoteRegisterScreen extends Component<
     });
   };
   UNSAFE_componentWillMount(): void {
+    /// console.log('Type', this.props.navigation.state.params.type.item.id);
+    if (this.props.navigation.state.params.type.type === 'Edit') {
+      //console.log('id', this.props.navigation.state.params.type.item);
+      const {
+        Descripcion,
+        Fecha,
+        Materia,
+        Tipo,
+        Titulo,
+        docs,
+      } = this.props.navigation.state.params.type.item;
+      console.log('DATE', new Date(Fecha));
+      this.setState({
+        selectedSegment: Tipo,
+        titulo: Titulo,
+        materia: Materia,
+        descripcion: Descripcion,
+        docs: docs,
+        date: new Date(Fecha),
+      });
+    }
     CacheUtil.getList().then(List => {
       if (List !== null) {
         this.setState({
@@ -137,11 +159,46 @@ class NoteRegisterScreen extends Component<
     }
   }
 
+  newlist = [];
+  delete = id => {
+    let list = this.state.prebusList;
+    console.log('all', list);
+    console.log('id', id);
+    list.map(item => {
+      if (item.id !== id) {
+        this.newlist.push(item);
+      }
+    });
+    let newItem = {
+      id: this.getLastId(this.listExit) + 1,
+      Tipo: '',
+      Titulo: 'none',
+      Materia: 'none',
+      Fecha: 'none',
+      Descripcion: 'none',
+      docs: this.state.docs,
+    };
+    newItem.Titulo = this.state.titulo;
+    newItem.Tipo = this.state.selectedSegment;
+    newItem.Materia = this.state.materia;
+    newItem.Fecha = this.state.date.toISOString();
+    newItem.Descripcion = this.state.descripcion;
+    newItem.docs = this.state.docs;
+    this.newlist.push(newItem);
+    console.log('newlist', this.newlist);
+    CacheUtil.setList(JSON.stringify(this.newlist));
+    resetAndNavigateTo(this.props.navigation, 'Mine');
+  };
+
   validation = () => {
     if (this.state.titulo !== '') {
       if (this.state.materia !== '') {
         if (this.state.descripcion !== '') {
-          this.setList();
+          if (this.props.navigation.state.params.type.type === 'Edit') {
+            this.delete(this.props.navigation.state.params.type.item.id);
+          } else {
+            this.setList();
+          }
         } else {
           Toast.showWithGravity(
             'Introduzca Descripcion',

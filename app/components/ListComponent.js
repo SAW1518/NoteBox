@@ -29,6 +29,8 @@ class ListComponent extends Component<ListComponentProps, ListComponentState> {
       uriImg = require('../utils/icons/icons8-xls-48.png');
     } else if (this.props.item.extencin == 'application/msword') {
       uriImg = require('../utils/icons/icons8-word-48.png');
+    } else {
+      uriImg = require('../utils/icons/document-1.png');
     }
     return (
       <ListItem
