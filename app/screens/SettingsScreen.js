@@ -63,7 +63,7 @@ class SettingsScreen extends Component<
     CacheUtil.setList(JSON.stringify([]));
   };
   _deleteHorario = () => {
-    CacheUtil.setHorario("");
+    CacheUtil.setHorario('');
   };
 
   render() {

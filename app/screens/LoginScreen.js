@@ -39,6 +39,7 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
         this.setState({
           response: 'Usuario logueado.',
         });
+        goAndNavigateTo(this.props.navigation, 'Mine');
       })
       .catch(error => {
         //Error happend
