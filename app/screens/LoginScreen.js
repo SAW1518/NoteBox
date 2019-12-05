@@ -40,8 +40,9 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
           response: 'Usuario logueado.',
         });
       })
-      .catch(function(error) {
+      .catch(error => {
         //Error happend
+        console.log('error', error.toString());
         this.setState({
           response: error.toString(),
         });

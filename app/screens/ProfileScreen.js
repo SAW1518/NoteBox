@@ -27,12 +27,11 @@ class ProfileScreen extends Component<ProfileScreenProps, ProfileScreenState> {
     firebase
       .auth()
       .signOut()
-      .then(function() {
-        // Sign-out successful.
-        goAndNavigateTowParams(this.props.navigation, 'Login', {});
+      .then(r => {
+        console.log('renpose ', r);
       })
-      .catch(function(error) {
-        console.log(error);
+      .catch(e => {
+        console.log('renpose ', e);
       });
   }
 
