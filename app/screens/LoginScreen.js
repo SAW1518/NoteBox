@@ -12,6 +12,7 @@ import {goAndNavigateTo} from '../NavigationUtil';
 import color from '../utils/common/ColorsCommon';
 import firebase from '../config/firebase';
 import {height, width} from 'react-native-dimension';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 type LoginScreenProps = {
   navigation: any,
@@ -70,7 +71,9 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
-            placeholder="Email..."
+            placeholder="test@example.com"
+            returnKeyType="next"
+            keyboardType="email-address"
             placeholderTextColor={color.white}
             onChangeText={text => this.setState({email: text})}
           />
@@ -79,7 +82,8 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
           <TextInput
             secureTextEntry
             style={styles.inputText}
-            placeholder="Password..."
+            placeholder="********"
+            returnKeyType="go"
             placeholderTextColor={color.white}
             onChangeText={text => this.setState({password: text})}
           />
@@ -87,8 +91,11 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
         <TouchableOpacity onPress={() => this.login()} style={styles.loginBtn}>
           <Text style={styles.loginText}>Inicio de Sesion</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => goAndNavigateTo(this.props.navigation, 'SignUp') } >
           <Text style={styles.loginText}>Crear Cuenta</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => goAndNavigateTo(this.props.navigation, 'Mine') } >
+          <Text style={styles.loginText}>Anomino</Text>
         </TouchableOpacity>
       </View>
     );
@@ -98,7 +105,7 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.dark,
+    backgroundColor: '#4b4b4b',
     alignItems: 'center',
     justifyContent: 'center',
   },

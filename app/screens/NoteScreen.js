@@ -108,6 +108,7 @@ class NoteScreen extends Component<NoteScreenProps, NoteScreenState> {
     });
     goAndNavigateTo(this.props.navigation, 'NoteView');
   }
+  
   _renderNote = item => {
     let date = new Date(item.Fecha);
     return (

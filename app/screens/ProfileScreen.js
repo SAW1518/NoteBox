@@ -16,19 +16,22 @@ class ProfileScreen extends Component<ProfileScreenProps, ProfileScreenState> {
   };
 
   state = {
-    user: null,
+    user: '',
   };
 
   UNSAFE_componentWillMount(): void {}
 
   componentDidMount() {}
 
-  logout() {
+
+  logout = () => {
+    console.log('Usuario: ', this.state.user);
     firebase
       .auth()
       .signOut()
       .then(r => {
         console.log('renpose ', r);
+        goAndNavigateTo(this.props.navigation, 'Login')
       })
       .catch(e => {
         console.log('renpose ', e);
