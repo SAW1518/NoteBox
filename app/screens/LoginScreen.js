@@ -64,7 +64,7 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
             width: width(60),
             height: width(40),
             resizeMode: 'stretch',
-            marginBottom: height(2),
+            marginBottom: height(6),
           }}
           source={require('../utils/icons/icon_Note_Box.png')}
         />
@@ -91,7 +91,7 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
         <TouchableOpacity onPress={() => this.login()} style={styles.loginBtn}>
           <Text style={styles.loginText}>Inicio de Sesion</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => goAndNavigateTo(this.props.navigation, 'SignUp') } >
+        <TouchableOpacity style={styles.RegisterBtn} onPress={() => goAndNavigateTo(this.props.navigation, 'SignUp') } >
           <Text style={styles.loginText}>Crear Cuenta</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => goAndNavigateTo(this.props.navigation, 'Mine') } >
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 50,
     color: color.white,
-    marginBottom: 40,
+    marginBottom: 60,
   },
   inputView: {
     width: '80%',
@@ -131,9 +131,19 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 11,
   },
+  RegisterBtn:{
+    width: '80%',
+    backgroundColor: '#0275d8',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+  },
   loginBtn: {
     width: '80%',
-    backgroundColor: '#fb5b5a',
+    backgroundColor: '#5cb85c',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',

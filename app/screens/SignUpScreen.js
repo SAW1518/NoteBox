@@ -5,6 +5,7 @@ import {
     Image,
     Text,
     TextInput,
+    Button,
     TouchableOpacity,
     KeyboardAvoidingView
 } from 'react-native';
@@ -41,16 +42,29 @@ class SignUpScreen extends Component<SignUpScreenPro, SignUpScreenState>{
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(response => {
-            console.log('response: ', response);
-            this.setState({
-                message: 'Registro exitoso.'
+            var uid;
+            var user = firebase.auth().currentUser;
+            uid = user.uid;
+
+            let db = firebase.firestore()
+            .collection("Usuarios")
+            .doc(uid);
+
+            db.set({
+                name: this.state.nombre,
+                email: this.state.email,
+                escolaridad: this.state.escolaridad,
+                password: this.state.password
             });
+
+            this.setState({message: "Registro exitoso."});
 
             {this.showAlert()}
         })
         .catch(error => {
             console.log('error', error.toString());
             this.setState({
+                message: "Ha ocurrido un error.",
                 showAlert: true
             });
         });
@@ -130,13 +144,13 @@ class SignUpScreen extends Component<SignUpScreenPro, SignUpScreenState>{
                   />
                 </View>
                 <TouchableOpacity onPress={() => this.singUp()} style={styles.loginBtn}>
-                    <Text style={styles.loginText}>Registrar</Text>
+                    <Text>Registrar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => goAndNavigateTo(this.props.navigation, 'Login') } >
-                  <Text style={styles.loginText}>Ir al login</Text>
-                </TouchableOpacity>
-                
-
+                <Button 
+                    title="Login" 
+                    style={{marginBottom: 50}}
+                    onPress={ () => goAndNavigateTo(this.props.navigation, 'Login') } 
+                />
 
                 <AwesomeAlert
                   show={showAlert}
@@ -195,16 +209,17 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         width: '80%',
-        backgroundColor: '#fb5b5a',
+        backgroundColor: '#5cb85c',
         borderRadius: 25,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 40,
-        marginBottom: 10,
+        marginTop: 30,
+        marginBottom: 15,
     },
     loginText: {
         color: 'white',
+        marginBottom: 15,
     }, 
 });
 
