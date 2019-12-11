@@ -17,29 +17,6 @@ const store = createStore(reducers, middleware);
 console.ignoredYellowBox = ['Remote debugger'];
 
 export default class App extends Component<void> {
-  async PermissionsCam() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Cool Photo App Camera Permission',
-          message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the camera');
-      } else {
-        console.log('Camera permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
   async PermissionsStoWRITE() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -56,7 +33,6 @@ export default class App extends Component<void> {
   }
 
   UNSAFE_componentWillMount(): void {
-    this.PermissionsCam();
     this.PermissionsStoWRITE();
   }
 

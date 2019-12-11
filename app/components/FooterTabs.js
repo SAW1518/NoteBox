@@ -12,6 +12,7 @@ import {
 import {height, width} from 'react-native-dimension';
 import {StyleSheet} from 'react-native';
 import color from '../utils/common/ColorsCommon';
+import CacheUtil from '../utils/cache/CacheUtil';
 
 type FooterTabsProps = {
   selectionHandler: number => void,
@@ -23,9 +24,18 @@ type FooterTabsState = {};
 class FooterTabs extends Component<FooterTabsProps, FooterTabsState> {
   state = {
     TabSeleccion: 0,
+    showp: true,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    CacheUtil.getSecion().then(r => {
+      if (r == 'Anomino') {
+        this.setState({
+          showp: false,
+        });
+      }
+    });
+  }
 
   render() {
     const {selectedIndex, containerStyle} = this.props;
@@ -34,8 +44,7 @@ class FooterTabs extends Component<FooterTabsProps, FooterTabsState> {
         <Footer
           style={{
             backgroundColor: color.dark,
-        }}
-        >
+          }}>
           <FooterTab
             activeBgColor={'white'}
             style={[
@@ -90,34 +99,33 @@ class FooterTabs extends Component<FooterTabsProps, FooterTabsState> {
                 Ajustes
               </Text>
             </Button>
-            <Button vertical onPress={() => this.props.selectionHandler(3)}>
-              <Icon
-                style={{
-                  color: selectedIndex === 3 ? color.greenLime : color.dark,
-                }}
-                name="person"
-              />
-              <Text
-                style={{
-                  color: selectedIndex === 3 ? color.greenLime : color.dark,
-              }}>Contact</Text>
-            </Button>
+            {this._renderP(selectedIndex)}
           </FooterTab>
         </Footer>
       </Container>
     );
   }
+  _renderP = selectedIndex => {
+    if (this.state.showp) {
+      return (
+        <Button vertical onPress={() => this.props.selectionHandler(3)}>
+          <Icon
+            style={{
+              color: selectedIndex === 3 ? color.greenLime : color.dark,
+            }}
+            name="person"
+          />
+          <Text
+            style={{
+              color: selectedIndex === 3 ? color.greenLime : color.dark,
+            }}>
+            Contact
+          </Text>
+        </Button>
+      );
+    }
+  };
 }
 
-const styles = StyleSheet.create({
-  text: {},
-  icon: {},
-  Button: {},
-  imageIconStyle: {
-    height: 20,
-    width: 20,
-    resizeMode: 'stretch',
-  },
-});
 
 export default FooterTabs;

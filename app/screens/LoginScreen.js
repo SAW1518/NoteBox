@@ -12,7 +12,7 @@ import {goAndNavigateTo} from '../NavigationUtil';
 import color from '../utils/common/ColorsCommon';
 import firebase from '../config/firebase';
 import {height, width} from 'react-native-dimension';
-import AwesomeAlert from 'react-native-awesome-alerts';
+import CacheUtil from '../utils/cache/CacheUtil';
 
 type LoginScreenProps = {
   navigation: any,
@@ -51,7 +51,15 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
       });
   };
 
-  UNSAFE_componentWillMount(): void {}
+  UNSAFE_componentWillMount(): void {
+    CacheUtil.getSecion().then(SE => {
+      if (SE !== null) {
+        goAndNavigateTo(this.props.navigation, 'Mine');
+      } else {
+        console.log('Not Sesion');
+      }
+    });
+  }
 
   componentDidMount() {}
 
@@ -91,10 +99,16 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
         <TouchableOpacity onPress={() => this.login()} style={styles.loginBtn}>
           <Text style={styles.loginText}>Inicio de Sesion</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.RegisterBtn} onPress={() => goAndNavigateTo(this.props.navigation, 'SignUp') } >
+        <TouchableOpacity
+          style={styles.RegisterBtn}
+          onPress={() => goAndNavigateTo(this.props.navigation, 'SignUp')}>
           <Text style={styles.loginText}>Crear Cuenta</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => goAndNavigateTo(this.props.navigation, 'Mine') } >
+        <TouchableOpacity
+          onPress={() => {
+            CacheUtil.setSecion('Anomino');
+            goAndNavigateTo(this.props.navigation, 'Mine');
+          }}>
           <Text style={styles.loginText}>Anomino</Text>
         </TouchableOpacity>
       </View>
@@ -105,7 +119,7 @@ class LoginScreen extends Component<LoginScreenProps, LoginScreenState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#4b4b4b',
+    backgroundColor: color.dark,
     alignItems: 'center',
     justifyContent: 'center',
   },

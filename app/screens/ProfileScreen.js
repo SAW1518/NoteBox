@@ -66,12 +66,12 @@ class ProfileScreen extends Component<ProfileScreenProps, ProfileScreenState> {
       }).then( response => {
         this.setState({
           message: 'Información actualizada.'
-        }); 
+        });
       }).catch( error => {
         this.setState({
           message: 'Ha ocurrido un error.'
-        }); 
-      });  
+        });
+      });
     }else{
       this.setState({
         message: 'La contraseña es incorrecta.'
@@ -141,7 +141,7 @@ class ProfileScreen extends Component<ProfileScreenProps, ProfileScreenState> {
                 placeholder="Juanito Lopez"
                 returnKeyType="next"
                 placeholderTextColor={color.white}
-                value={this.state.nombre} 
+                value={this.state.nombre}
                 onChangeText={text => this.setState({nombre: text})}
               />
           </View>
@@ -184,8 +184,8 @@ class ProfileScreen extends Component<ProfileScreenProps, ProfileScreenState> {
           <TouchableOpacity style={styles.loginBtn} onPress={() => this.updateUser()}>
             <Text style={{ color: "#FFF", fontWeight: "500" }}>Actualizar</Text>
           </TouchableOpacity>
-        <Button 
-          title="Logout" 
+        <Button
+          title="Logout"
           style={{marginTop: 60}}
           onPress={() => this.logout()} />
 
@@ -202,7 +202,7 @@ class ProfileScreen extends Component<ProfileScreenProps, ProfileScreenState> {
           onConfirmPressed={() => {
             this.redirect();
           }}
-        />        
+        />
       </View>
     );
   }
@@ -211,7 +211,7 @@ class ProfileScreen extends Component<ProfileScreenProps, ProfileScreenState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#4b4b4b',
+    backgroundColor: color.dark,
     alignItems: 'center',
     justifyContent: 'center',
   },

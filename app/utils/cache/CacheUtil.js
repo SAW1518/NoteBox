@@ -2,6 +2,7 @@
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-community/async-storage';
 const HORARIO = 'HORARIO';
+const Sesion = 'Sesion';
 const INITIAL = 'INITIAL';
 const USER_PROFILE = 'USER_PROFILE';
 const LISTDATE = 'LISTDATE';
@@ -9,6 +10,8 @@ const LISTDATE = 'LISTDATE';
 type CacheType = {
   getApiUrl: () => string,
   setHorario: any => void,
+  setSecion: any => void,
+  getSecion: () => Promise<string>,
   setInitial: any => void,
   delteListItem: any => void,
   getHORARIO: () => Promise<string>,
@@ -36,6 +39,10 @@ const CacheUtil: CacheType = {
     console.log('Horario Seted', H);
     return AsyncStorage.setItem(HORARIO, H.toString());
   },
+  setSecion: (S: string) => {
+    console.log('set sesion', S);
+    return AsyncStorage.setItem(Sesion, S.toString());
+  },
   setInitial: (I: string) => {
     console.log('Initial in', I);
     return AsyncStorage.setItem(INITIAL, I.toString());
@@ -58,6 +65,9 @@ const CacheUtil: CacheType = {
     CacheUtil.setList(JSON.stringify(newlist));
   },
 
+  getSecion: async (): Promise<string> => {
+    return await AsyncStorage.getItem(Sesion);
+  },
   getHORARIO: async (): Promise<string> => {
     return await AsyncStorage.getItem(HORARIO);
   },
